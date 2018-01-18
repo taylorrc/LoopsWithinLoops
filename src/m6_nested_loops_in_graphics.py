@@ -3,8 +3,8 @@ This project demonstrates NESTED LOOPS (i.e., loops within loops)
 in the context of TWO-DIMENSIONAL GRAPHICS.
 
 Authors: David Mutchler, Valerie Galluzzi, Mark Hays, Amanda Stouder,
-         their colleagues and PUT_YOUR_NAME_HERE.
-"""  # TODO: 1. PUT YOUR NAME IN THE ABOVE LINE.
+         their colleagues and Ryan Taylor.
+"""  # DONE: 1. PUT YOUR NAME IN THE ABOVE LINE.
 
 import rosegraphics as rg
 
@@ -80,9 +80,61 @@ def draw_L(window, circle, r, c):
     and m and n are small, positive integers.
     """
     # ------------------------------------------------------------------
-    # TODO: 2. Implement and test this function.
+    # DONE: 2. Implement and test this function.
     #     The testing code is already written for you (above).
     # ------------------------------------------------------------------
+
+    # # Start with the 'Column' portion
+    # for k in range(r):
+    #     original_x = circle.center.x
+    #     original_y = circle.center.y
+    #
+    #     new_circle = rg.Circle(circle.center, circle.radius)
+    #
+    #     for j in range(3):
+    #         center_x = circle.center.x + (j * 2 * circle.radius)
+    #         new_circle.center.x = center_x
+    #
+    #         new_circle.attach_to(window)
+    #         window.render(0.05)
+    #
+    #     window.render(0.05)
+    #
+    #     new_circle.center.x = original_x
+    #     new_circle.center.y = original_y * (k + 1)
+
+    # Start with the 'column' portion of the L
+
+    for k in range(r):
+        new_circle = circle.clone()
+        new_circle.center.y = circle.center.y + (2 * new_circle.radius * k)
+
+        for j in range(3):
+            next_circle = new_circle.clone()
+            next_circle.center.x = circle.center.x + (2 * new_circle.radius * j)
+            next_circle.fill_color = circle.fill_color
+            next_circle.attach_to(window)
+
+            window.render(0.05)
+
+        window.render(0.05)
+
+    # Do the 'row' portion of the L
+
+    for k in range(3):
+        new_circle = circle.clone()
+        new_circle.center.y = circle.center.y + (2 * new_circle.radius * k) + (2 * circle.radius * r)
+
+        for j in range(c + 3):
+            next_circle = new_circle.clone()
+            next_circle.center.x = circle.center.x + (2 * new_circle.radius * j)
+            next_circle.fill_color = circle.fill_color
+            next_circle.attach_to(window)
+
+            window.render(0.05)
+
+        window.render(0.05)
+
 
 
 def run_test_draw_wall_on_right():
@@ -121,10 +173,34 @@ def draw_wall_on_right(rectangle, n, window):
     and n is a small, positive integer.
     """
     # ------------------------------------------------------------------
-    # TODO: 3. Implement and test this function.
+    # DONE: 3. Implement and test this function.
     #     The testing code is already written for you (above).
     # ------------------------------------------------------------------
 
+    for k in range(n):
+        number_of_rectangles = k + 1
+
+        starting_corner1x = rectangle.corner_1.x
+        starting_corner1y = rectangle.corner_1.y + (k * rectangle.get_height())
+
+        starting_corner2x = rectangle.corner_2.x
+        starting_corner2y = rectangle.corner_2.y + (k * rectangle.get_height())
+
+        for j in range(number_of_rectangles):
+            corner1x = starting_corner1x - (j * rectangle.get_width())
+            corner1y = starting_corner1y
+            corner2x = starting_corner2x - (j * rectangle.get_width())
+            corner2y = starting_corner2y
+
+            corner1 = rg.Point(corner1x, corner1y)
+            corner2 = rg.Point(corner2x, corner2y)
+
+            rectangle1 = rectangle.clone()
+            rectangle1.corner_1 = corner1
+            rectangle1.corner_2 = corner2
+
+            rectangle1.attach_to(window)
+            window.render(0.05)
 
 # ----------------------------------------------------------------------
 # Calls  main  to start the ball rolling.
